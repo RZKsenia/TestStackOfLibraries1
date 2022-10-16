@@ -2,7 +2,9 @@ from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
 import uvicorn
+
 from db.base import database
+from db.base import engine_sync
 
 app = FastAPI()
 
