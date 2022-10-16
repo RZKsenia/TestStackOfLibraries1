@@ -36,7 +36,8 @@ async def startup():
     Выполняется при запуске приложения
     :return:
     """
-    database.connect()
+    await database.connect()
+
 
 
 @app.on_event('shutdown')
@@ -45,7 +46,7 @@ async def shutdown():
     Выполняется при закрытии приложения
     :return:
     """
-    database.disconnect()
+    await database.disconnect()
 
 if __name__ == "__main__":
     uvicorn.run('main:app', host='0.0.0.0', port=8080, reload=True)
