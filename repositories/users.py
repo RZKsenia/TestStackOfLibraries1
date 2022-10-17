@@ -13,10 +13,11 @@ class UserRepository(BaseRepository):
 
     async def get_all(self, limit: int = 100, skip: int = 0) -> List[User]:
         """
+        Получить список пользователей.
         :param limit: максимальное количество пользователей, которое можем получить
         :param skip: сколько пользователей пропустить для реализации пагинации (способ возвращать
         объекты постранично).
-        :return:
+        :return: список пользователей
         """
         query = users.select().limit(limit).offset(skip)
         return await self.database.fetch_all(query=query)
@@ -84,7 +85,7 @@ class UserRepository(BaseRepository):
         :param email: тип str
         :return:
         """
-        query = users.select().where(users.c.email == email).first()
+        query = users.select().where(users.c.email == email)
         user = await self.database.fetch_one(query)
         if user is None:
             return None

@@ -1,7 +1,7 @@
 from typing import List
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException, status
 from repositories.users import UserRepository
-from endpoints.depends import get_user_repository
+from endpoints.depends import get_user_repository, get_current_user
 from models.user import User, UserIn
 
 router = APIRouter()
@@ -32,7 +32,10 @@ async def create_user(user_data: UserIn, user_repository: UserRepository = Depen
     return result
 
 @router.put('/', response_model=User)
-async def update_user(id_of_user: int, user_data: UserIn, user_repository: UserRepository = Depends(get_user_repository)):
+async def update_user(id_of_user: int,
+                      user_data: UserIn,
+                      user_repository: UserRepository = Depends(get_user_repository),
+                      current_user: User = Depends(get_current_user)):
     """
     Обноваление пользователя
     :param id_of_user: id пользователя, чьи данные будем обновлять
@@ -40,4 +43,8 @@ async def update_user(id_of_user: int, user_data: UserIn, user_repository: UserR
     :param user_repository: репозиторий пользователя
     :return:
     """
+    old_user = await user_repository.get_by_id(id=id_of_user)
+    if old_user is None or old_user.email != current_user.email:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail='Пользователь не найден.')
     return await user_repository.update(id=id_of_user, u=user_data)

@@ -2,6 +2,7 @@ from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
 from endpoints.users import router as users_router
+from endpoints.auth import router as auth_router
 import uvicorn
 
 from db.base import database
@@ -9,6 +10,7 @@ from db.base import engine_sync
 
 app = FastAPI(title='Employment exchange')
 app.include_router(users_router, prefix='/users', tags=['users'])
+app.include_router(auth_router, prefix='/auth', tags=['auth'])
 
 class Item(BaseModel):
     name: str
