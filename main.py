@@ -1,23 +1,19 @@
 from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
+from endpoints.users import router as users_router
 import uvicorn
 
 from db.base import database
 from db.base import engine_sync
 
-app = FastAPI()
-
+app = FastAPI(title='Employment exchange')
+app.include_router(users_router, prefix='/users', tags=['users'])
 
 class Item(BaseModel):
     name: str
     price: float
     is_offer: Union[bool, None] = None
-
-
-@app.get('/')
-def read_root():
-    return {'Hello': 'World'}
 
 
 @app.get('/items/{item_id}')

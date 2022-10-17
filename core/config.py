@@ -23,3 +23,7 @@ DATABASE_URL = (
 )
 
 ACCESS_TOKEN_EXPIRE_MINUTES = config("ACCESS_TOKEN_EXPIRE_MINUTES")
+SECRET_KEY = config('EE_SECRET_KEY',
+                    cast=str,
+                    default='bc32216ed17bf79dbe1c6585222e307390a1d52dab76d1a68cda1a64b9a87193')
+ALGORITHM = 'HS256'
