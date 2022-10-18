@@ -2,6 +2,7 @@ from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
 from endpoints.users import router as users_router
+from endpoints.jobs import router as jobs_router
 from endpoints.auth import router as auth_router
 import uvicorn
 
@@ -10,28 +11,8 @@ from db.base import engine_sync
 
 app = FastAPI(title='Employment exchange')
 app.include_router(users_router, prefix='/users', tags=['users'])
+app.include_router(jobs_router, prefix='/jobs', tags=['jobs'])
 app.include_router(auth_router, prefix='/auth', tags=['auth'])
-
-class Item(BaseModel):
-    name: str
-    price: float
-    is_offer: Union[bool, None] = None
-
-
-@app.get('/items/{item_id}')
-def read_item(item_id: int, q: Union[str, None] = None):
-    return {'item_id': item_id, 'q': q}
-
-
-@app.put('/items/{item_id}')
-def update_item(item_id: int, item: Item):
-    """
-    Обработка запроса на обноваление предмета
-    :param item_id:
-    :param item:
-    :return:
-    """
-    return {'item_name': item.name, 'item_id': item_id}
 
 
 @app.on_event('startup')

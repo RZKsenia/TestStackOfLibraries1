@@ -37,7 +37,7 @@ async def update_user(id_of_user: int,
                       user_repository: UserRepository = Depends(get_user_repository),
                       current_user: User = Depends(get_current_user)):
     """
-    Обноваление пользователя
+    Обновление пользователя
     :param id_of_user: id пользователя, чьи данные будем обновлять
     :param user_data: данные пользователя
     :param user_repository: репозиторий пользователя
